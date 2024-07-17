@@ -15,7 +15,7 @@ jobs:
 
     - name: Run Bash script tests
       run: |
-        chmod +x ./my_script.sh &&  ./my_script.sh
+        sudo -i chmod +x ./my_script.sh &&  ./my_script.sh
 
   deploy:
     runs-on: ubuntu-latest
@@ -33,9 +33,9 @@ jobs:
 
     - name: Copy files to VM
       run: |
-        scp -i private_key -o StrictHostKeyChecking=no -P ${{ secrets.PORT }} my_script.sh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/root
+        scp -i private_key -o StrictHostKeyChecking=no -P ${{ secrets.PORT }} my_script.sh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}:/ec2-user
 
     - name: Run script on remote server
       run: |
-        ssh -i private_key -o StrictHostKeyChecking=no -p ${{ secrets.PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'sh /root/my_script.sh'
+        ssh -i private_key -o StrictHostKeyChecking=no -p ${{ secrets.PORT }} ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }} 'sh /ec2-user/my_script.sh'
 

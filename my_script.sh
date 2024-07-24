@@ -1,13 +1,7 @@
 #!/bin/bash
 
-# Define your static IP address from an environment variable
-STATIC_IP="${SSH_HOST}"  # Ensure this environment variable is set in your CI/CD pipeline
-
-# Check if STATIC_IP is set
-if [ -z "$STATIC_IP" ]; then
-  echo "Error: SSH_HOST environment variable is not set."
-  exit 1
-fi
+# Define your static IP address
+STATIC_IP="52.0.251.82"
 
 # Update package index
 sudo apt update -q
@@ -75,4 +69,3 @@ sudo ufw allow 'Nginx Full'
 echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
 
 echo "LEMP stack installation complete. You can verify PHP by visiting http://$STATIC_IP/info.php"
-

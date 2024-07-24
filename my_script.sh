@@ -35,7 +35,7 @@ sudo apt install -y -q php-fpm php-mysql
 # Configure Nginx to use PHP processor
 cat << EOF | sudo tee /etc/nginx/sites-available/default
 server {
-    listen $STATIC_IP:80 default_server;
+    listen 0.0.0.0:80 default_server;
     listen [::]:80 default_server;
 
     root /var/www/html;

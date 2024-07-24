@@ -1,7 +1,13 @@
 #!/bin/bash
 
-# Define your static IP address
-STATIC_IP="YOUR_STATIC_IP"
+# Define your static IP address from an environment variable
+STATIC_IP="${SSH_HOST}"  # Ensure this environment variable is set in your CI/CD pipeline
+
+# Check if STATIC_IP is set
+if [ -z "$STATIC_IP" ]; then
+  echo "Error: SSH_HOST environment variable is not set."
+  exit 1
+fi
 
 # Update package index
 sudo apt update -q

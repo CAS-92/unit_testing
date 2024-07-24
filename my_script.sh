@@ -4,23 +4,33 @@
 STATIC_IP="YOUR_STATIC_IP"
 
 # Update package index
-sudo apt update
+sudo apt update -q
 
 # Install Nginx
-sudo apt install -y nginx
+sudo apt install -y -q nginx
 
 # Start and enable Nginx
 sudo systemctl start nginx
 sudo systemctl enable nginx
 
-# Install MySQL
-sudo apt install -y mysql-server
+# Preconfigure MySQL installation
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
+sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
 
-# Run MySQL secure installation
-sudo mysql_secure_installation
+# Install MySQL
+sudo apt install -y -q mysql-server
+
+# Secure MySQL installation
+sudo mysql -u root -proot << EOF
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+DELETE FROM mysql.user WHERE User='';
+DROP DATABASE IF EXISTS test;
+DELETE FROM mysql.db WHERE Db='test' OR Db='test_%';
+FLUSH PRIVILEGES;
+EOF
 
 # Install PHP
-sudo apt install -y php-fpm php-mysql
+sudo apt install -y -q php-fpm php-mysql
 
 # Configure Nginx to use PHP processor
 cat << EOF | sudo tee /etc/nginx/sites-available/default

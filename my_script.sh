@@ -13,9 +13,9 @@ sudo apt install -y -q nginx
 sudo systemctl start nginx
 sudo systemctl enable nginx
 
-# Preconfigure MySQL installation
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
-sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+# Preconfigure MySQL installation using a temporary file
+echo "mysql-server mysql-server/root_password password root" | sudo debconf-set-selections
+echo "mysql-server mysql-server/root_password_again password root" | sudo debconf-set-selections
 
 # Install MySQL
 sudo apt install -y -q mysql-server
@@ -69,3 +69,4 @@ sudo ufw allow 'Nginx Full'
 echo "<?php phpinfo(); ?>" | sudo tee /var/www/html/info.php
 
 echo "LEMP stack installation complete. You can verify PHP by visiting http://$STATIC_IP/info.php"
+
